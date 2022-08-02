@@ -21,7 +21,13 @@ class ShippingContainer:
     def __init__(self, owner_code, contents):
         self.contents = contents
         self.owner_code = owner_code
-        self.bic = ShippingContainer._make_bic_code(
+        self.bic = self._make_bic_code(
             owner_code,
             ShippingContainer._generate_serial())
-    
+
+class RefrigeratedShippingContainer(ShippingContainer):
+    @staticmethod
+    def _make_bic_code(owner_code, serial):
+        return iso6346.create(owner_code=owner_code,
+            serial=str(serial).zfill(6),
+            category='R')
