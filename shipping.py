@@ -35,10 +35,18 @@ class RefrigeratedShippingContainer(ShippingContainer):
     MAX_CELSIUS = 4.0
 
     def __init__(self, owner_code, contents, celsius):
-        if celsius > self.MAX_CELSIUS:
-            raise ValueError("Temperature too hot !")
         super().__init__(owner_code, contents)
         self.celsius = celsius
+
+    @property
+    def celsius(self):
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value > self.MAX_CELSIUS:
+            raise ValueError("Temperature too hot !")
+        self._celsius = value
 
     @staticmethod
     def _make_bic_code(owner_code, serial):
