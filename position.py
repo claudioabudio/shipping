@@ -28,3 +28,7 @@ class Position:
 
     def __str__(self):
         return f"{abs(self.latitude)}º {self.latitude_hemisphere}, {abs(self.longitude)}º {self.longitude_hemisphere}"
+
+    def __format__(self, format_spec):
+        return (f"{format(abs(self.latitude), '.2f')}º {self.latitude_hemisphere} "
+                f"{format(abs(self.longitude), '.2f')}º {self.longitude_hemisphere}")
