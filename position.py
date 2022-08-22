@@ -23,8 +23,8 @@ class Position:
         return "N" if self.latitude > 0 else "S"
 
     @property
-    def longitud_hemisphere(self):
+    def longitude_hemisphere(self):
         return "E" if self.longitude > 0 else "W"
 
     def __str__(self):
-        return f"{abs(self.latitude)}º {self.latitude_hemisphere}, {abs(self.longitude)}º {self.longitud_hemisphere}"
+        return f"{abs(self.latitude)}º {self.latitude_hemisphere}, {abs(self.longitude)}º {self.longitude_hemisphere}"
