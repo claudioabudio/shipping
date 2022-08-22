@@ -30,5 +30,10 @@ class Position:
         return f"{abs(self.latitude)}º {self.latitude_hemisphere}, {abs(self.longitude)}º {self.longitude_hemisphere}"
 
     def __format__(self, format_spec):
-        return (f"{format(abs(self.latitude), '.2f')}º {self.latitude_hemisphere} "
-                f"{format(abs(self.longitude), '.2f')}º {self.longitude_hemisphere}")
+        component_format_spec = ".2f"
+        prefix, dot, suffix = format_spec.partition(".")
+        if dot:
+            num_decimals = int(suffix)
+            component_format_spec = f".{num_decimals}f"
+        return (f"{format(abs(self.latitude), component_format_spec)}º {self.latitude_hemisphere} "
+                f"{format(abs(self.longitude), component_format_spec)}º {self.longitude_hemisphere}")
