@@ -1,3 +1,41 @@
+import inspect
+
+def auto_repr(cls):
+    print(f"Decorating {cls.__name__} with auto_repr")
+    members = vars(cls)
+    for name, member in members.items():
+        print(name, member)
+    if "__repr__" in members:
+        raise TypeError(f"{cls.__name__} already defines __repr__")
+    if "__init__" not in members:
+        raise TypeError(f"{cls.__name__} does not override __init__")
+
+    sig = inspect.signature(cls.__init__)
+    parameter_names = list(sig.parameters)[1:]
+    print(f"__init__ parameter names: {parameter_names}")
+    if not all(
+            isinstance(members.get(name, None), property) for name in parameter_names
+        ):
+        raise TypeError(f"can not apply auto_repr to {cls.__name__} because not all "
+                        "__init__ parameters have a corresponding property")
+
+    def synthesized_repr(self):
+        return "{typename}({args})".format(
+            typename=type(self).__name__,
+            args=", ".join(
+               "{name}={value!r}".format(
+                   name=name2,
+                   value=getattr(self, name2)
+               ) for name2 in parameter_names
+            )
+        )
+
+    setattr(cls, "__repr__", synthesized_repr)
+    return cls
+
+
+
+@auto_repr
 class Location:
     def __init__(self, name, position):
         self._name = name
@@ -11,8 +49,8 @@ class Location:
     def position(self):
         return self._position
 
-    def __repr__(self):
-        return f"{type(self).__name__}(name={self.name}, position={self.position})"
+    # def __repr__(self):
+    #     return f"{type(self).__name__}(name={self.name}, position={self.position})"
 
     def __str__(self):
         return self.name
