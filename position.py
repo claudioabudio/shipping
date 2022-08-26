@@ -1,3 +1,7 @@
+from dataclasses import dataclass
+
+
+@dataclass(eq=True)
 class Position:
     def __init__(self, latitude, longitude):
         if not (-90 <= latitude <= 90):

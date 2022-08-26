@@ -1,10 +1,7 @@
 import inspect
 
 def auto_repr(cls):
-    print(f"Decorating {cls.__name__} with auto_repr")
     members = vars(cls)
-    for name, member in members.items():
-        print(name, member)
     if "__repr__" in members:
         raise TypeError(f"{cls.__name__} already defines __repr__")
     if "__init__" not in members:
@@ -12,7 +9,6 @@ def auto_repr(cls):
 
     sig = inspect.signature(cls.__init__)
     parameter_names = list(sig.parameters)[1:]
-    print(f"__init__ parameter names: {parameter_names}")
     if not all(
             isinstance(members.get(name, None), property) for name in parameter_names
         ):
